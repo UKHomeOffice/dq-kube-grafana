@@ -1,0 +1,79 @@
+matrix:
+  GRAFANA_VERSION:
+    - latest
+
+pipeline:
+  build_grafana:
+    image: ukhomeoffice/drone-docker
+    repo: quay.io/ukhomeofficedigital/dq-grfana-docker
+    secrets: [ docker_username, docker_password ]
+    registry: quay.io
+    context: app/grfana-docker
+    dockerfile: app/grfana-docker/Dockerfile
+    force_tag: true
+    build_args:
+      - GRAFANA_VERSION=${GRAFANA_VERSION}
+      - GF_INSTALL_IMAGE_RENDERER_PLUGIN=true
+      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+    tags:
+      - ${DRONE_COMMIT_SHA}
+      - b${DRONE_BUILD_NUMBER}
+    when:
+      event: push
+
+  deploy_to_notprod:
+    image: quay.io/ukhomeofficedigital/kd
+    environment:
+      - ENV=notprod
+      - GRAFANA_VERSION=${GRAFANA_VERSION}
+      - KUBE_NAMESPACE=dq-management-notprod
+      - INSECURE_SKIP_TLS_VERIFY=true
+      - JIRA_HOME_VOLUME_SIZE=10Gi
+      - HOSTNAME=grafana.notprod.dq.homeoffice.gov.uk
+    commands:
+      - export KUBE_TOKEN=$$NOTPROD_KUBE_TOKEN
+      - export KUBE_SERVER=$$NOTPROD_KUBE_SERVER
+      - export WHITELIST_RANGES=$$NOTPROD_WHITELIST_RANGES
+      # - export SLACK_WEBHOOK=$$NOTPROD_SLACK_WEBHOOK
+      - kd -f network-policy.yml -f pvc.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
+    secrets:
+      - NOTPROD_KUBE_TOKEN
+      - NOTPROD_KUBE_SERVER
+      - NOTPROD_WHITELIST_RANGES
+      # - NOTPROD_ACCESS_KEY_ID
+      # - NOTPROD_SECRET_ACCESS_KEY
+      # - NOTPROD_SLACK_WEBHOOK
+    when:
+      event: push
+
+  # deploy_to_prod:
+  #   image: quay.io/ukhomeofficedigital/kd
+  #   environment:
+  #     - ENV=prod
+  #     - JIRA_VERSION=${JIRA_VERSION}
+  #     - KUBE_NAMESPACE=dq-management
+  #     - INSECURE_SKIP_TLS_VERIFY=true
+  #     - JIRA_HOME_VOLUME_SIZE=25Gi
+  #     - HOSTNAME=jira.dq.homeoffice.gov.uk
+  #     - DATABASE_SECRET_NAME=dq-management-jira-rds-access
+  #     - AWS_BUCKET_SECRET_NAME=s3-dq-management-jira-backup
+  #     - DATABASE_SCHEMA_NAME=public
+  #   commands:
+  #     - export KUBE_TOKEN=$$PROD_KUBE_TOKEN
+  #     - export KUBE_SERVER=$$PROD_KUBE_SERVER
+  #     - export BUCKET_NAME=$$PROD_BUCKET_NAME
+  #     - export ACCESS_KEY_ID=$$PROD_ACCESS_KEY_ID
+  #     - export SECRET_ACCESS_KEY=$$PROD_SECRET_ACCESS_KEY
+  #     - export SLACK_WEBHOOK=$$PROD_SLACK_WEBHOOK
+  #     - kd -f network-policy.yml -f pvc.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
+  #   secrets:
+  #     - PROD_KUBE_TOKEN
+  #     - PROD_KUBE_SERVER
+  #     - PROD_BUCKET_NAME
+  #     - PROD_ACCESS_KEY_ID
+  #     - PROD_SECRET_ACCESS_KEY
+  #     - PROD_SLACK_WEBHOOK
+  #   when:
+  #     environment: production
+  #     branch: master
+  #     event: deployment
