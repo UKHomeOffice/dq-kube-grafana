@@ -8,8 +8,8 @@ pipeline:
     repo: quay.io/ukhomeofficedigital/dq-grfana-docker
     secrets: [ docker_username, docker_password ]
     registry: quay.io
-    context: app/grfana-docker
-    dockerfile: app/grfana-docker/Dockerfile
+    context: app/grafana-docker
+    dockerfile: app/grafana-docker/Dockerfile
     force_tag: true
     build_args:
       - GRAFANA_VERSION=${GRAFANA_VERSION}
@@ -34,7 +34,6 @@ pipeline:
       - export KUBE_TOKEN=$$NOTPROD_KUBE_TOKEN
       - export KUBE_SERVER=$$NOTPROD_KUBE_SERVER
       - export WHITELIST_RANGES=$$NOTPROD_WHITELIST_RANGES
-      # - export SLACK_WEBHOOK=$$NOTPROD_SLACK_WEBHOOK
       - kd -f network-policy.yml -f pvc.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
     secrets:
       - NOTPROD_KUBE_TOKEN
