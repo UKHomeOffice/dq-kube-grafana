@@ -2,7 +2,7 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: jira
+  name: grafana
   annotations:
     environment: {{ .ENV }}
     {{ if eq .ENV "notprod" }}downscaler/uptime: Mon-Fri 07:00-18:30 Europe/London{{ end }}
@@ -22,7 +22,7 @@ spec:
         fsGroup: 1000
       containers:
       - name: grafana
-        image: quay.io/ukhomeofficedigital/jira-docker:{{ .DRONE_COMMIT_SHA }}
+        image: quay.io/ukhomeofficedigital/dq-grfana-docker:{{ .DRONE_COMMIT_SHA }}
         imagePullPolicy: Always
         securityContext:
           runAsNonRoot: true
@@ -42,9 +42,9 @@ spec:
             value: '443'
           - name: SERVER_REDIRECT_PORT
             value: '10443'
-        volumeMounts:
-          - mountPath: /var/atlassian/jira
-            name: jira
+        # volumeMounts:
+        #   - mountPath: /var/lib/grafana-plugins
+        #     name: grafana
 
       - name: proxy
         image: quay.io/ukhomeofficedigital/dq-nginx-proxy-redirect:b54
@@ -77,7 +77,7 @@ spec:
       #       value: '5431'
       #   ports:
       #      - containerPort: 5000
-      volumes:
-        - name: grafana
-          persistentVolumeClaim:
-            claimName: grafana
+      # volumes:
+      #   - name: grafana
+      #     persistentVolumeClaim:
+      #       claimName: grafana

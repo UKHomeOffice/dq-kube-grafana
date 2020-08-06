@@ -34,7 +34,8 @@ pipeline:
       - export KUBE_TOKEN=$$NOTPROD_KUBE_TOKEN
       - export KUBE_SERVER=$$NOTPROD_KUBE_SERVER
       - export WHITELIST_RANGES=$$NOTPROD_WHITELIST_RANGES
-      - kd -f network-policy.yml -f pvc.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
+      # - kd -f network-policy.yml -f pvc.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
+      - kd -f network-policy.yml -f service.yml -f ingress.yml -f secrets.yml -f deployment.yml
     secrets:
       - NOTPROD_KUBE_TOKEN
       - NOTPROD_KUBE_SERVER
