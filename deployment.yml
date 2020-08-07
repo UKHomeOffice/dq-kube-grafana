@@ -42,9 +42,9 @@ spec:
             value: '443'
           - name: SERVER_REDIRECT_PORT
             value: '10443'
-        # volumeMounts:
-        #   - mountPath: /var/lib/grafana-plugins
-        #     name: grafana
+        volumeMounts:
+          - mountPath: /var/lib/grafana-plugins
+            name: grafana
 
       - name: proxy
         image: quay.io/ukhomeofficedigital/dq-nginx-proxy-redirect:b58
@@ -77,7 +77,7 @@ spec:
       #       value: '5431'
       #   ports:
       #      - containerPort: 5000
-      # volumes:
-      #   - name: grafana
-      #     persistentVolumeClaim:
-      #       claimName: grafana
+      volumes:
+        - name: grafana
+          persistentVolumeClaim:
+            claimName: grafana
