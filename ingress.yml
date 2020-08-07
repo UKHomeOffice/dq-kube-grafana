@@ -2,7 +2,7 @@
 apiVersion: extensions/v1beta1
 kind: Ingress
 metadata:
-  name: grafana-ingress
+  name: grafana
   labels:
     cert-manager.io/solver: http01
   annotations:
@@ -22,6 +22,6 @@ spec:
     http:
       paths:
       - backend:
-          serviceName: grafana-service
+          serviceName: grafana
           servicePort: https
         path: /

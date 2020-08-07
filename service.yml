@@ -3,8 +3,8 @@ apiVersion: v1
 kind: Service
 metadata:
   labels:
-    name: grafana-service
-  name: grafana-service
+    name: grafana
+  name: grafana
 spec:
   ports:
   - name: https
