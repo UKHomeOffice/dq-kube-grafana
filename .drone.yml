@@ -3,23 +3,24 @@ matrix:
     - latest
 
 pipeline:
-  build_grafana:
-    image: ukhomeoffice/drone-docker
-    repo: quay.io/ukhomeofficedigital/dq-grfana-docker
-    secrets: [ docker_username, docker_password ]
-    registry: quay.io
-    context: app/grafana-docker
-    dockerfile: app/grafana-docker/Dockerfile
-    force_tag: true
-    build_args:
-      - GRAFANA_VERSION=${GRAFANA_VERSION}
-      - GF_INSTALL_IMAGE_RENDERER_PLUGIN=true
-      - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
-    tags:
-      - ${DRONE_COMMIT_SHA}
-      - b${DRONE_BUILD_NUMBER}
-    when:
-      event: push
+  # build_grafana:
+  #   image: ukhomeoffice/drone-docker
+  #   repo: quay.io/ukhomeofficedigital/dq-grfana-docker
+  #   secrets: [ docker_username, docker_password ]
+  #   registry: quay.io
+  #   context: app/grafana-docker
+  #   dockerfile: app/grafana-docker/Dockerfile
+  #   force_tag: true
+  #   build_args:
+  #     - GRAFANA_VERSION=${GRAFANA_VERSION}
+  #     - GF_INSTALL_IMAGE_RENDERER_PLUGIN=true
+  #     - GF_INSTALL_PLUGINS=grafana-clock-panel,grafana-simple-json-datasource
+  #   tags:
+  #     - latest
+  #     - ${DRONE_COMMIT_SHA}
+  #     - b${DRONE_BUILD_NUMBER}
+  #   when:
+  #     event: push
 
   deploy_to_notprod:
     image: quay.io/ukhomeofficedigital/kd
