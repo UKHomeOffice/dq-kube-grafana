@@ -33,6 +33,8 @@ RUN if [ $GF_INSTALL_IMAGE_RENDERER_PLUGIN = "true" ]; then \
     rm -rf /var/lib/apt/lists/*; \
 fi
 
+EXPOSE 3000
+
 USER grafana
 
 ENV GF_RENDERER_PLUGIN_CHROME_BIN="/usr/bin/google-chrome"

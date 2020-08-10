@@ -7,6 +7,13 @@ spec:
     matchLabels:
       name: grafana
   ingress:
-    - ports:
-      - protocol: TCP
-        port: 10443
+  - from:
+    - namespaceSelector:
+        matchLabels:
+          name: ingress-external
+    - podSelector:
+        matchLabels:
+          name: ingress
+    ports:
+    - protocol: TCP
+      port: 10443
