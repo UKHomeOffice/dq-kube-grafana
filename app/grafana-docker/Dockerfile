@@ -1,8 +1,12 @@
 ARG GRAFANA_VERSION=${GRAFANA_VERSION}
 
+LABEL maintainer="dqdevops@homeoffice.gsi.gov.uk"
+
 FROM grafana/grafana:${GRAFANA_VERSION}-ubuntu
 
 USER root
+
+RUN set -x && usermod -u ${USERMAP_UID} grafana
 
 # Set DEBIAN_FRONTEND=noninteractive in environment at build-time
 ARG DEBIAN_FRONTEND=noninteractive
@@ -24,6 +28,8 @@ RUN if [ $GF_INSTALL_IMAGE_RENDERER_PLUGIN = "true" ]; then \
     apt-get autoremove -y && \
     rm -rf /var/lib/apt/lists/*; \
 fi
+
+ENV USERMAP_UID 1000
 
 USER grafana
 
