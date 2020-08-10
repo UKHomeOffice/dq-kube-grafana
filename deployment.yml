@@ -64,7 +64,7 @@ spec:
           - name: CLIENT_MAX_BODY_SIZE
             value: '10'
         ports:
-          - name: http
+          - name: https
             containerPort: 10443
 
       volumes:
