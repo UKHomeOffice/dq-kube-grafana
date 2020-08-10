@@ -4,6 +4,14 @@ FROM grafana/grafana:${GRAFANA_VERSION}-ubuntu
 
 USER root
 
+ENV USERMAP_UID 1000
+
+RUN apt-get update \
+    && apt-get install -y vim
+
+RUN set -x && usermod -u ${USERMAP_UID} grafana  \
+  && groupmod -g ${USERMAP_UID} grafana
+
 # Set DEBIAN_FRONTEND=noninteractive in environment at build-time
 ARG DEBIAN_FRONTEND=noninteractive
 
