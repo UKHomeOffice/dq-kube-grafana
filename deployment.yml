@@ -42,8 +42,8 @@ spec:
             value: '443'
           - name: SERVER_REDIRECT_PORT
             value: '10443'
-          ports:
-            - containerPort: 3000
+        ports:
+          - containerPort: 3000
         volumeMounts:
           - mountPath: /var/lib/grafana-plugins
             name: grafana
