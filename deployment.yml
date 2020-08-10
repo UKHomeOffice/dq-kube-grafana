@@ -62,9 +62,9 @@ spec:
           - name: NAXSI_USE_DEFAULT_RULES
             value: 'FALSE'
           - name: CLIENT_MAX_BODY_SIZE
-            value: '100'
+            value: '10'
         ports:
-          - name: https
+          - name: http
             containerPort: 10443
 
       volumes:
