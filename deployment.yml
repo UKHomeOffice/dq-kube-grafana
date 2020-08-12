@@ -34,18 +34,24 @@ spec:
             cpu: 1.5
             memory: 2Gi
         env:
-          - name: SERVER_PORT
-            value: '3000'
-          - name: SERVER_PROXY_NAME
-            value: {{ .HOSTNAME }}
-          - name: SERVER_PROXY_PORT
-            value: '443'
-          - name: SERVER_REDIRECT_PORT
-            value: '10443'
+          - name: GF_AWS_PROFILES
+            value: {{ .GF_AWS_PROFILES }}
+          - name: GF_AWS_NOTPROD_REGION
+            value: {{ .GF_AWS_NOTPROD_REGION }}
+          - name: GF_AWS_PROD_REGION
+            value: {{ .GF_AWS_PROD_REGION }}
+          - name: GF_AWS_NOTPROD_ACCESS_KEY_ID
+            value: {{ .GF_AWS_NOTPROD_ACCESS_KEY_ID }}
+          - name: GF_AWS_NOTPROD_SECRET_ACCESS_KEY
+            value: {{ .GF_AWS_NOTPROD_SECRET_ACCESS_KEY }}
+          - name: GF_AWS_PROD_ACCESS_KEY_ID
+            value: {{ .GF_AWS_PROD_ACCESS_KEY_ID }}
+          - name: GF_AWS_PROD_SECRET_ACCESS_KEY
+            value: {{ .GF_AWS_PROD_SECRET_ACCESS_KEY }}
         ports:
           - containerPort: 3000
         volumeMounts:
-          - mountPath: /var/lib/grafana-plugins
+          - mountPath: /var/lib/grafana
             name: grafana
 
       - name: proxy
