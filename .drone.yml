@@ -62,7 +62,7 @@ pipeline:
           --file deployment.yml \
           --file service.yml \
           --file ingress.yml \
-          --file network-policy.yml
+          --file network-policy.yml \
     when:
       event: push
 
