@@ -34,6 +34,14 @@ spec:
             cpu: 1.5
             memory: 2Gi
         env:
+          - name: SERVER_PORT
+            value: '3000'
+          - name: SERVER_PROXY_NAME
+            value: {{ .HOSTNAME }}
+          - name: SERVER_PROXY_PORT
+            value: '443'
+          - name: SERVER_REDIRECT_PORT
+            value: '10443'
           - name: GF_AWS_PROFILES
             value: {{ .GF_AWS_PROFILES }}
           - name: GF_AWS_NOTPROD_REGION
